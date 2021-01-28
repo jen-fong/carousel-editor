@@ -9,12 +9,14 @@ function ImageItem({ image, handleImageClick, isSelected }) {
         "card--border": isSelected,
       })}
     >
-      <div className="image-selector__image-container">
+      <div
+        className="image-selector__image-container"
+        onClick={() => handleImageClick(image.imageName)}
+      >
         <img
           src={`/images/${image.imageName}`}
           alt={image.imageName}
           className="image-selector__image-container-image"
-          onClick={() => handleImageClick(image.imageName)}
         />
       </div>
 

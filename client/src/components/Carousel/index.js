@@ -3,7 +3,7 @@ import classNames from "classnames";
 import "./Carousel.css";
 import CarouselItem from "./CarouselItem";
 
-function Carousel({ images, handleRemoveImages }) {
+function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
   const [offset, setOffset] = useState(0);
   const defaultImageCount = 2;
   const [imagesCount, setImagesCount] = useState(defaultImageCount);
@@ -53,12 +53,12 @@ function Carousel({ images, handleRemoveImages }) {
   }
 
   function removeImages() {
-    handleRemoveImages(selectedImagesToRemove);
+    onRemoveImages(selectedImagesToRemove);
     setSelectedImagesToRemove([]);
   }
 
-  function view() {
-    console.log("view");
+  function view(image) {
+    onUpdateDisplayImage(image);
   }
 
   function updateEditMode() {

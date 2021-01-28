@@ -16,7 +16,7 @@ function CarouselItem({
       style={{
         height: height,
         width: width,
-        display: display ? "inline-block" : "none", // todo move this to a class?
+        display: display ? "block" : "none", // todo move this to a class?
       }}
       className={classNames("carousel-item", {
         "carousel-item--border": selected,

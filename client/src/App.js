@@ -4,6 +4,7 @@ import ImageSelector from "./components/ImageSelector";
 import { baseURL } from "./api";
 import "./App.css";
 import Carousel from "./components/Carousel";
+import ImageViewer from "./components/ImageViewer";
 
 function sortByName(a, b) {
   return a.imageCaption.localeCompare(b.imageCaption, undefined, {
@@ -14,6 +15,7 @@ function sortByName(a, b) {
 function App() {
   const [images, setImages] = useState([]);
   const [selectedImageNames, setSelectedImageNames] = useState([]);
+  const [displayImageName, setDisplayImageName] = useState("");
 
   useEffect(() => {
     axios.get(`${baseURL}/images`).then((res) => {
@@ -25,7 +27,6 @@ function App() {
 
   function addSelectedImages(images) {
     const updatedSelectedImages = selectedImageNames.concat(images);
-    console.log(updatedSelectedImages);
     setSelectedImageNames(updatedSelectedImages);
   }
 
@@ -33,8 +34,18 @@ function App() {
     const updatedSelectedImages = selectedImageNames.filter((imageName) => {
       return !images.includes(imageName);
     });
-    console.log("remove", selectedImages);
+
     setSelectedImageNames(updatedSelectedImages);
+
+    // remove the display image if item was deleted in carousel otherwise it
+    // would be weird to keep showing the image when it's been removed
+    if (images.includes(displayImageName)) {
+      setDisplayImageName(null);
+    }
+  }
+
+  function updateDisplayImage(imageName) {
+    setDisplayImageName(imageName);
   }
 
   const selectedImages = images
@@ -45,6 +56,10 @@ function App() {
     .filter((image) => !selectedImageNames.includes(image.imageName))
     .sort(sortByName);
 
+  const displayImage = images.find(
+    (image) => image.imageName === displayImageName
+  );
+
   return (
     <div className="app">
       <ImageSelector
@@ -54,8 +69,11 @@ function App() {
 
       <Carousel
         images={selectedImages}
-        handleRemoveImages={removeSelectedImages}
+        onRemoveImages={removeSelectedImages}
+        onUpdateDisplayImage={updateDisplayImage}
       />
+
+      {displayImage && <ImageViewer image={displayImage} />}
     </div>
   );
 }
