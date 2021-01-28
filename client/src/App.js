@@ -5,6 +5,12 @@ import { baseURL } from "./api";
 import "./App.css";
 import Carousel from "./components/Carousel";
 
+function sortByName(a, b) {
+  return a.imageCaption.localeCompare(b.imageCaption, undefined, {
+    sensitivity: "accent",
+  });
+}
+
 function App() {
   const [images, setImages] = useState([]);
   const [selectedImageNames, setSelectedImageNames] = useState([]);
@@ -19,17 +25,25 @@ function App() {
 
   function addSelectedImages(images) {
     const updatedSelectedImages = selectedImageNames.concat(images);
+    console.log(updatedSelectedImages);
     setSelectedImageNames(updatedSelectedImages);
   }
 
-  const selectedImages = images.filter((image) =>
-    selectedImageNames.includes(image.imageName)
-  );
+  function removeSelectedImages(images) {
+    const updatedSelectedImages = selectedImageNames.filter((imageName) => {
+      return !images.includes(imageName);
+    });
+    console.log("remove", selectedImages);
+    setSelectedImageNames(updatedSelectedImages);
+  }
+
+  const selectedImages = images
+    .filter((image) => selectedImageNames.includes(image.imageName))
+    .sort(sortByName);
+
   const availableImages = images
     .filter((image) => !selectedImageNames.includes(image.imageName))
-    .sort((a, b) =>
-      a.imageCaption.toLowerCase().localeCompare(b.imageCaption.toLowerCase())
-    );
+    .sort(sortByName);
 
   return (
     <div className="app">
@@ -38,7 +52,10 @@ function App() {
         handleAddImages={addSelectedImages}
       />
 
-      <Carousel images={selectedImages} />
+      <Carousel
+        images={selectedImages}
+        handleRemoveImages={removeSelectedImages}
+      />
     </div>
   );
 }
