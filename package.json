@@ -1,5 +1,18 @@
 {
+  "name": "carousel-component-editor",
+  "description": "carousel editor that allows you to add and remove images to a carousel",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "(cd api && npm install); (cd client && npm install);",
+    "start": "concurrently \"npm run api\" \"npm run client\"",
+    "api": "cd api && npm start",
+    "client": "cd client && npm start"
+  },
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
+    "concurrently": "^5.3.0",
     "cz-conventional-changelog": "^3.3.0"
   },
   "config": {

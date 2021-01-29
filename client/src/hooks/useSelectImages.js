@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 function useSelectImages(initialState = []) {
   const [selectedImageNames, setSelectedImageNames] = useState(initialState);

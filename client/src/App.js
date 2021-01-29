@@ -14,6 +14,7 @@ function sortByName(a, b) {
 
 function App() {
   const [images, setImages] = useState([]);
+  // I would normally use ids but the json didn't have any so I used the names
   const [selectedImageNames, setSelectedImageNames] = useState([]);
   const [displayImageName, setDisplayImageName] = useState("");
 

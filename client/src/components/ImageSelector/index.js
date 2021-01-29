@@ -24,7 +24,7 @@ function ImageSelector({ availableImages, onAddImages }) {
         {availableImages.map((image, i) => {
           return (
             <ImageItem
-              key={i}
+              key={image.imageName}
               image={image}
               handleImageClick={handleImageSelect}
               isSelected={selectedImageNames.includes(image.imageName)}
