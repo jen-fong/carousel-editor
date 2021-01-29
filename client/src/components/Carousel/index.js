@@ -91,14 +91,6 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
     }
   }, [offset, carouselImagesCount, lastSet, images.length]);
 
-  if (!images.length) {
-    return (
-      <section className="carousel-container">
-        <p>Please select and add images from above to see images in carousel</p>
-      </section>
-    );
-  }
-
   useEffect(() => {
     // reset the edit mode when images have been removed from carousel
     if (isEditMode && !images.length) {
