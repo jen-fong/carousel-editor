@@ -1,10 +1,10 @@
 const express = require("express");
-const carouselImages = require("../data/carouselImages.json");
+const images = require("../data/images.json");
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.json(carouselImages);
+  res.json(images);
 });
 
 module.exports = router;
