@@ -1,0 +1,44 @@
+.arrow-control {
+  position: absolute;
+  top: 50%;
+  background-color: #d3d3d3;
+  color: white;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.arrow-control--disabled {
+  cursor: not-allowed;
+}
+
+.arrow::before {
+  border-style: solid;
+  border-width: 4px 4px 0 0;
+  content: "";
+  display: inline-block;
+  height: 10px;
+  position: relative;
+  transform: rotate(-45deg);
+  vertical-align: top;
+  width: 10px;
+}
+
+.arrow__right:before {
+  transform: rotate(45deg);
+}
+
+.arrow__left:before {
+  transform: rotate(-135deg);
+}
+
+.arrow-control__left {
+  left: 100px;
+}
+
+.arrow-control__right {
+  right: 100px;
+}

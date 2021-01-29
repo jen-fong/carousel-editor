@@ -1,0 +1,11 @@
+.dropdown {
+  width: 50px;
+  border: 1px solid #a9a9a9;
+  margin-right: 10px;
+  height: 100%;
+  padding-left: 8px;
+}
+
+.dropdown-label {
+  margin-right: 5px;
+}

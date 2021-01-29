@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
-import classNames from "classnames";
+import React, { useEffect, useState } from "react";
 import useSelectImageNames from "../../hooks/useSelectImages";
+import Dropdown from "../Dropdown";
 import CarouselItem from "./CarouselItem";
-import "./Carousel.css";
+import ArrowNav from "./ArrowNav";
+import Button from "../Button";
+import "./index.css";
 
 function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
   const [offset, setOffset] = useState(0);
@@ -28,7 +30,6 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
       setOffset(prev);
     }
   }
-
   function onNextClick() {
     if (!isLastSet) {
       const next = offset + 1;
@@ -118,25 +119,17 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
               );
             })}
 
-        <button
-          className={classNames("arrow-control arrow-control__right", {
-            "arrow-control--disabled": isLastSet,
-          })}
-          onClick={onNextClick}
+        <ArrowNav
+          handleClick={onNextClick}
           disabled={isLastSet}
-        >
-          <span className="arrow arrow__right"></span>
-        </button>
+          direction="right"
+        />
 
-        <button
-          className={classNames("arrow-control arrow-control__left", {
-            "arrow-control--disabled": isFirstSet,
-          })}
-          onClick={onPrevClick}
+        <ArrowNav
+          handleClick={onPrevClick}
           disabled={isFirstSet}
-        >
-          <span className="arrow arrow__left"></span>
-        </button>
+          direction="left"
+        />
       </div>
 
       <div className="carousel-mode-toggle">

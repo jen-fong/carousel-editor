@@ -4,11 +4,7 @@ import "./index.css";
 function ImageViewer({ image }) {
   return (
     <div className="image-viewer">
-      <img
-        className="image-viewer__image"
-        src={`/images/${image.imageName}`}
-        alt={image.imageCaption}
-      />
+      <img src={`/images/${image.imageName}`} alt={image.imageCaption} />
 
       <p className="image-viewer__caption">{image.imageCaption}</p>
     </div>
