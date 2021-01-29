@@ -1,24 +1,20 @@
 import React from "react";
 import classNames from "classnames";
-import "./ImageSelector.css";
+import "./ImageItem.css";
 
 function ImageItem({ image, handleImageClick, isSelected }) {
   return (
     <div
-      className={classNames("card", {
-        "card--border": isSelected,
+      className={classNames("image-selector-card", {
+        "image-selector-card--border": isSelected,
       })}
       onClick={() => handleImageClick(image.imageName)}
     >
       <div className="image-selector__image-container">
-        <img
-          src={`/images/${image.imageName}`}
-          alt={image.imageName}
-          className="image-selector__image-container-image"
-        />
+        <img src={`/images/${image.imageName}`} alt={image.imageName} />
       </div>
 
-      <p className="card__text">{image.imageCaption}</p>
+      <p className="image-selector-card__text">{image.imageCaption}</p>
     </div>
   );
 }

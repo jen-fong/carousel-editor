@@ -1,0 +1,42 @@
+.carousel__item {
+  border: 3px solid transparent;
+  margin: 0 2px;
+  position: relative;
+  display: none;
+}
+
+.carousel__item.active {
+  display: inline-block;
+}
+
+.carousel__item-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 17%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-size: 1rem;
+}
+
+.carousel__item:hover > .carousel__item-caption {
+  visibility: visible;
+  opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel__item--border {
+  border: 3px solid #0285fe;
+}
+
+.carousel__item > img {
+  height: 100%;
+  width: 100%;
+}

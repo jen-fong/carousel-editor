@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import "./Carousel.css";
+import "./CarouselItem.css";
 
 function CarouselItem({
   image,
@@ -16,21 +16,17 @@ function CarouselItem({
       style={{
         height: height,
         width: width,
-        display: display ? "block" : "none", // todo move this to a class?
       }}
-      className={classNames("carousel-item", {
-        "carousel-item--border": selected,
+      className={classNames("carousel__item", {
+        "carousel__item--border": selected,
+        active: display,
       })}
       onClick={() => handleClick(image.imageName)}
     >
-      <img
-        src={`/images/${image.imageName}`}
-        alt={image.imageCaption}
-        className="carousel__item"
-      />
+      <img src={`/images/${image.imageName}`} alt={image.imageCaption} />
 
       {!isEditMode && (
-        <p className="carousel-item__caption">{image.imageCaption}</p>
+        <p className="carousel__item-caption">{image.imageCaption}</p>
       )}
     </div>
   );

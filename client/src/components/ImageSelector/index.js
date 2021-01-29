@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import classNames from "classnames";
+import React from "react";
 import useSelectImages from "../../hooks/useSelectImages";
+import Button from "../Button";
 import ImageItem from "./ImageItem";
-import "./ImageSelector.css";
+import "./index.css";
 
 function ImageSelector({ availableImages, onAddImages }) {
   const [selectedImageNames, toggleImageSelect] = useSelectImages([]);
@@ -14,17 +14,14 @@ function ImageSelector({ availableImages, onAddImages }) {
   function addImagesToCarousel() {
     if (selectedImageNames.length) {
       onAddImages(selectedImageNames);
-      toggleImageSelect([]);
+      toggleImageSelect(null);
     }
   }
 
   return (
     <section className="image-selector">
-      {/* TODO add header here */}
-
       <div className="image-selector-body">
         {availableImages.map((image, i) => {
-          // TODO move the image out to own component
           return (
             <ImageItem
               key={i}
@@ -37,15 +34,13 @@ function ImageSelector({ availableImages, onAddImages }) {
       </div>
 
       <div className="image-selector__actions">
-        <button
-          className={classNames("btn", {
-            "btn--disabled": !selectedImageNames.length,
-          })}
-          onClick={addImagesToCarousel}
+        <Button
+          type="primary"
           disabled={!selectedImageNames.length}
+          onClick={addImagesToCarousel}
         >
-          Add
-        </button>
+          Add images
+        </Button>
       </div>
     </section>
   );

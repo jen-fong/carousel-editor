@@ -6,20 +6,25 @@ import ArrowNav from "./ArrowNav";
 import Button from "../Button";
 import "./index.css";
 
+const defaultImageCount = 2;
+const dropdownOptions = Array.from(Array(4), (_, x) => x + 2);
+
 function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
   const [offset, setOffset] = useState(0);
-  const defaultImageCount = 2;
-  const [imagesCount, setImagesCount] = useState(defaultImageCount);
+  const [carouselImagesCount, setCarouselImagesCount] = useState(
+    defaultImageCount
+  );
   const [selectedImagesNames, toggleImageSelect] = useSelectImageNames([]);
-
   const [isEditMode, setIsEditMode] = useState(false);
 
-  // I chose 600 because nums 2-5 all divide evenly in 600
+  // I chose 600 because nums 2-5 all divide evenly in 600 but otherwise, I
+  // would do some calculations to get the number of images and their max
+  // width into the carousel
   const carouselWidth = 600;
 
-  const imageSizes = carouselWidth / imagesCount;
-  const activeSlideStart = offset * imagesCount;
-  const lastSet = Math.ceil(images.length / imagesCount) - 1; // -1 for the array index
+  const imageSize = carouselWidth / carouselImagesCount;
+  const activeSlideStart = offset * carouselImagesCount;
+  const lastSet = Math.ceil(images.length / carouselImagesCount) - 1; // -1 for the array index
   const isLastSet = offset === lastSet;
   const isFirstSet = offset === 0;
 
@@ -39,23 +44,30 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
 
   function removeImages() {
     onRemoveImages(selectedImagesNames);
-    toggleImageSelect([]);
+    toggleImageSelect(null);
   }
 
-  function view(image) {
+  function updateImageViewer(image) {
     onUpdateDisplayImage(image);
   }
 
   function updateEditMode() {
+    if (!isEditMode) {
+      updateImageViewer(null);
+    } else {
+      toggleImageSelect(null);
+    }
+
     setIsEditMode(!isEditMode);
   }
 
-  function handleImageCountUpdate(e) {
-    setImagesCount(e.target.value);
+  function handleCarouselImageCountUpdate(e) {
+    setCarouselImagesCount(e.target.value);
   }
 
   useEffect(() => {
-    const carouselIndexOutOfBounds = offset * imagesCount >= images.length;
+    const carouselIndexOutOfBounds =
+      offset * carouselImagesCount >= images.length;
 
     // When changing the dropdown option or deleting an image at the end of the
     // carousel, the index will need to be updated so it doesn't show an empty
@@ -63,17 +75,15 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
     if (images.length && carouselIndexOutOfBounds) {
       setOffset(lastSet);
     }
-  }, [offset, imagesCount, lastSet, images.length]);
+  }, [offset, carouselImagesCount, lastSet, images.length]);
 
-  // prevent infinite loop in useEffect
-  const memoizedToggleImageSelect = useCallback(() => toggleImageSelect, [
-    toggleImageSelect,
-  ]);
-  useEffect(() => {
-    if (!isEditMode) {
-      memoizedToggleImageSelect([]);
-    }
-  }, [isEditMode, memoizedToggleImageSelect]);
+  if (!images.length) {
+    return (
+      <section className="carousel-container">
+        <p>Please select and add images from above to see images in carousel</p>
+      </section>
+    );
+  }
 
   useEffect(() => {
     // reset the edit mode when images have been removed from carousel
@@ -92,32 +102,56 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
 
   return (
     <section className="carousel-container">
+      <div className="carousel-controls">
+        <Dropdown
+          label="Select Number of Images"
+          id="carouselImageCount"
+          options={dropdownOptions}
+          value={carouselImagesCount}
+          handleChange={handleCarouselImageCountUpdate}
+        />
+
+        <Button type="primary" onClick={updateEditMode} style={{ width: 80 }}>
+          {isEditMode ? "View" : "Edit"}
+        </Button>
+
+        <Button
+          type="remove"
+          disabled={!selectedImagesNames.length}
+          onClick={removeImages}
+          style={{
+            visibility: !isEditMode ? "hidden" : "visible",
+            width: 100,
+          }}
+        >
+          Delete
+        </Button>
+      </div>
+
       <div
         className="carousel"
         style={{
           width: carouselWidth + 20, // add a little bit of buffer for styling
         }}
       >
-        {!images.length
-          ? "Please select images from above"
-          : images.map((image, i) => {
-              const imageInView =
-                activeSlideStart <= i &&
-                i <= activeSlideStart + imagesCount - 1;
+        {images.map((image, i) => {
+          const imageInView =
+            activeSlideStart <= i &&
+            i <= activeSlideStart + carouselImagesCount - 1;
 
-              return (
-                <CarouselItem
-                  key={image.imageName}
-                  image={image}
-                  height={imageSizes}
-                  width={imageSizes}
-                  display={imageInView}
-                  isEditMode={isEditMode}
-                  selected={selectedImagesNames.includes(image.imageName)}
-                  handleClick={isEditMode ? toggleImageSelect : view}
-                />
-              );
-            })}
+          return (
+            <CarouselItem
+              key={image.imageName}
+              image={image}
+              height={imageSize}
+              width={imageSize}
+              display={imageInView}
+              isEditMode={isEditMode}
+              selected={selectedImagesNames.includes(image.imageName)}
+              handleClick={isEditMode ? toggleImageSelect : updateImageViewer}
+            />
+          );
+        })}
 
         <ArrowNav
           handleClick={onNextClick}
@@ -130,25 +164,6 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
           disabled={isFirstSet}
           direction="left"
         />
-      </div>
-
-      <div className="carousel-mode-toggle">
-        <select value={imagesCount} onChange={handleImageCountUpdate}>
-          {Array.from(Array(4), (_, x) => x + 2).map((dropdownOption) => {
-            return (
-              <option key={dropdownOption} value={dropdownOption}>
-                {dropdownOption}
-              </option>
-            );
-          })}
-        </select>
-
-        <button onClick={updateEditMode}>{isEditMode ? "View" : "Edit"}</button>
-        {isEditMode && (
-          <button disabled={!toggleImageSelect.length} onClick={removeImages}>
-            Delete
-          </button>
-        )}
       </div>
     </section>
   );

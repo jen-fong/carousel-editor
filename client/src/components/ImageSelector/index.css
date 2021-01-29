@@ -1,0 +1,14 @@
+.image-selector {
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.image-selector-body {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-selector__actions {
+  display: flex;
+  justify-content: center;
+}

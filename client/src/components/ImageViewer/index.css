@@ -11,4 +11,7 @@
 .image-viewer__caption {
   font-size: 1.5rem;
   text-align: center;
+  background-color: #778899;
+  color: #ffffff;
+  padding: 10px 0;
 }

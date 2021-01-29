@@ -1,0 +1,17 @@
+.carousel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 50px;
+  position: relative;
+}
+
+.carousel {
+  padding: 10px 5px;
+}
+
+.carousel-controls {
+  margin-left: 10px;
+  display: flex;
+}

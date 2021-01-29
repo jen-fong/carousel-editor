@@ -2,13 +2,13 @@ import React from "react";
 import classNames from "classnames";
 import "./index.css";
 
-function Button({ type, disabled, ...props }) {
+function Button({ type, disabled, width, ...props }) {
   return (
     <button
       {...props}
       disabled={disabled}
-      className={classNames("btn", type, {
-        "btn-disabled": disabled,
+      className={classNames("btn", `btn--${type}`, {
+        "btn--disabled": disabled,
       })}
     >
       {props.children}

@@ -36,12 +36,6 @@ function App() {
     });
 
     setSelectedImageNames(updatedSelectedImages);
-
-    // remove the display image if item was deleted in carousel otherwise it
-    // would be weird to keep showing the image when it's been removed
-    if (images.includes(displayImageName)) {
-      setDisplayImageName(null);
-    }
   }
 
   function updateDisplayImage(imageName) {

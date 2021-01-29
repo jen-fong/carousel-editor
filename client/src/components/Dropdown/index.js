@@ -4,7 +4,7 @@ import "./index.css";
 function Dropdown({ value, handleChange, options, id, label }) {
   return (
     <div>
-      <label for={id} className="dropdown-label">
+      <label htmlFor={id} className="dropdown-label">
         {label}
       </label>
 
