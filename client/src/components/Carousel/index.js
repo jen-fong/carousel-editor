@@ -23,12 +23,26 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
   const carouselWidth = 600;
 
   const imageSize = carouselWidth / carouselImagesCount;
-  const activeSlideStart = offset * carouselImagesCount;
   const lastSet = Math.ceil(images.length / carouselImagesCount) - 1; // -1 for the array index
   const isLastSet = offset === lastSet;
   const isFirstSet = offset === 0;
 
-  // TODO move this to a reducer
+  function getImagesInDisplay() {
+    const start = offset * carouselImagesCount;
+    const end = start + carouselImagesCount;
+    const hasMoreThanOneSet = images.length > carouselImagesCount;
+    let imagesInDisplay = images.slice(start, end);
+
+    if (isLastSet && hasMoreThanOneSet) {
+      const missingImagesCount = carouselImagesCount - imagesInDisplay.length;
+      const imagesToFill = images.slice(start - missingImagesCount, start);
+      imagesInDisplay = [...imagesToFill, ...imagesInDisplay];
+    }
+    return imagesInDisplay.map((image) => image.imageName);
+  }
+
+  const imagesInDisplay = getImagesInDisplay();
+
   function onPrevClick() {
     if (!isFirstSet) {
       const prev = offset - 1;
@@ -62,7 +76,7 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
   }
 
   function handleCarouselImageCountUpdate(e) {
-    setCarouselImagesCount(e.target.value);
+    setCarouselImagesCount(parseInt(e.target.value));
   }
 
   useEffect(() => {
@@ -131,13 +145,11 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
       <div
         className="carousel"
         style={{
-          width: carouselWidth + 20, // add a little bit of buffer for styling
+          width: carouselWidth + 50, // add a little bit of buffer for styling
         }}
       >
         {images.map((image, i) => {
-          const imageInView =
-            activeSlideStart <= i &&
-            i <= activeSlideStart + carouselImagesCount - 1;
+          const imageInView = imagesInDisplay.includes(image.imageName);
 
           return (
             <CarouselItem
