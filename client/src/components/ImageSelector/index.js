@@ -1,31 +1,20 @@
 import React, { useState } from "react";
 import classNames from "classnames";
+import useSelectImages from "../../hooks/useSelectImages";
 import ImageItem from "./ImageItem";
 import "./ImageSelector.css";
 
-function ImageSelector({ availableImages, handleAddImages }) {
-  const [selectedImages, setSelectedImages] = useState([]);
+function ImageSelector({ availableImages, onAddImages }) {
+  const [selectedImageNames, toggleImageSelect] = useSelectImages([]);
 
-  function toggleImageSelect(selectedImageName) {
-    // Usually I would use ids but there wasn't any in the json
-    const isSelected = selectedImages.includes(selectedImageName);
-
-    let updatedSelectedImages;
-    if (isSelected) {
-      updatedSelectedImages = selectedImages.filter(
-        (imageName) => imageName !== selectedImageName
-      );
-    } else {
-      updatedSelectedImages = selectedImages.concat(selectedImageName);
-    }
-
-    setSelectedImages(updatedSelectedImages);
+  function handleImageSelect(selectedImageName) {
+    toggleImageSelect(selectedImageName);
   }
 
   function addImagesToCarousel() {
-    if (selectedImages.length) {
-      handleAddImages(selectedImages);
-      setSelectedImages([]);
+    if (selectedImageNames.length) {
+      onAddImages(selectedImageNames);
+      toggleImageSelect([]);
     }
   }
 
@@ -40,8 +29,8 @@ function ImageSelector({ availableImages, handleAddImages }) {
             <ImageItem
               key={i}
               image={image}
-              handleImageClick={toggleImageSelect}
-              isSelected={selectedImages.includes(image.imageName)}
+              handleImageClick={handleImageSelect}
+              isSelected={selectedImageNames.includes(image.imageName)}
             />
           );
         })}
@@ -50,10 +39,10 @@ function ImageSelector({ availableImages, handleAddImages }) {
       <div className="image-selector__actions">
         <button
           className={classNames("btn", {
-            "btn--disabled": !selectedImages.length,
+            "btn--disabled": !selectedImageNames.length,
           })}
           onClick={addImagesToCarousel}
-          disabled={!selectedImages.length}
+          disabled={!selectedImageNames.length}
         >
           Add
         </button>

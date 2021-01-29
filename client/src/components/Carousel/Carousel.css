@@ -15,40 +15,6 @@
   margin-left: 10px;
 }
 
-.carousel-item {
-  border: 3px solid transparent;
-  margin: 0 5px;
-  position: relative;
-}
-
-.carousel-item__caption {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  color: #fff;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.2s;
-  font-size: 1.5rem;
-}
-
-.carousel-item:hover > .carousel-item__caption {
-  visibility: visible;
-  opacity: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.carousel-item--border {
-  border: 3px solid blue;
-}
-
 .arrow-control {
   position: absolute;
   top: 50%;
@@ -89,9 +55,4 @@
 
 .arrow__left:before {
   transform: rotate(-135deg);
-}
-
-.carousel__item {
-  height: 100%;
-  width: 100%;
 }

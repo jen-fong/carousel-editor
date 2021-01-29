@@ -64,7 +64,7 @@ function App() {
     <div className="app">
       <ImageSelector
         availableImages={availableImages}
-        handleAddImages={addSelectedImages}
+        onAddImages={addSelectedImages}
       />
 
       <Carousel

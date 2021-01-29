@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import classNames from "classnames";
-import "./Carousel.css";
+import useSelectImageNames from "../../hooks/useSelectImages";
 import CarouselItem from "./CarouselItem";
+import "./Carousel.css";
 
 function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
   const [offset, setOffset] = useState(0);
   const defaultImageCount = 2;
   const [imagesCount, setImagesCount] = useState(defaultImageCount);
-  // TODO move to hook
-  const [selectedImagesToRemove, setSelectedImagesToRemove] = useState([]);
+  const [selectedImagesNames, toggleImageSelect] = useSelectImageNames([]);
 
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -36,25 +36,9 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
     }
   }
 
-  function toggleImageSelect(selectedImageName) {
-    // Usually I would use ids but there wasn't any in the json
-    const isSelected = selectedImagesToRemove.includes(selectedImageName);
-
-    let updatedSelectedImages;
-    if (isSelected) {
-      updatedSelectedImages = selectedImagesToRemove.filter(
-        (imageName) => imageName !== selectedImageName
-      );
-    } else {
-      updatedSelectedImages = selectedImagesToRemove.concat(selectedImageName);
-    }
-
-    setSelectedImagesToRemove(updatedSelectedImages);
-  }
-
   function removeImages() {
-    onRemoveImages(selectedImagesToRemove);
-    setSelectedImagesToRemove([]);
+    onRemoveImages(selectedImagesNames);
+    toggleImageSelect([]);
   }
 
   function view(image) {
@@ -80,11 +64,15 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
     }
   }, [offset, imagesCount, lastSet, images.length]);
 
+  // prevent infinite loop in useEffect
+  const memoizedToggleImageSelect = useCallback(() => toggleImageSelect, [
+    toggleImageSelect,
+  ]);
   useEffect(() => {
     if (!isEditMode) {
-      setSelectedImagesToRemove([]);
+      memoizedToggleImageSelect([]);
     }
-  }, [isEditMode]);
+  }, [isEditMode, memoizedToggleImageSelect]);
 
   useEffect(() => {
     // reset the edit mode when images have been removed from carousel
@@ -124,7 +112,7 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
                   width={imageSizes}
                   display={imageInView}
                   isEditMode={isEditMode}
-                  selected={selectedImagesToRemove.includes(image.imageName)}
+                  selected={selectedImagesNames.includes(image.imageName)}
                   handleClick={isEditMode ? toggleImageSelect : view}
                 />
               );
@@ -155,11 +143,7 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
         <select value={imagesCount} onChange={handleImageCountUpdate}>
           {Array.from(Array(4), (_, x) => x + 2).map((dropdownOption) => {
             return (
-              <option
-                key={dropdownOption}
-                value={dropdownOption}
-                selected={imagesCount}
-              >
+              <option key={dropdownOption} value={dropdownOption}>
                 {dropdownOption}
               </option>
             );
@@ -168,10 +152,7 @@ function Carousel({ images, onRemoveImages, onUpdateDisplayImage }) {
 
         <button onClick={updateEditMode}>{isEditMode ? "View" : "Edit"}</button>
         {isEditMode && (
-          <button
-            disabled={!selectedImagesToRemove.length}
-            onClick={removeImages}
-          >
+          <button disabled={!toggleImageSelect.length} onClick={removeImages}>
             Delete
           </button>
         )}

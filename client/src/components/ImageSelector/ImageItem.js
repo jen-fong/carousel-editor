@@ -8,11 +8,9 @@ function ImageItem({ image, handleImageClick, isSelected }) {
       className={classNames("card", {
         "card--border": isSelected,
       })}
+      onClick={() => handleImageClick(image.imageName)}
     >
-      <div
-        className="image-selector__image-container"
-        onClick={() => handleImageClick(image.imageName)}
-      >
+      <div className="image-selector__image-container">
         <img
           src={`/images/${image.imageName}`}
           alt={image.imageName}
